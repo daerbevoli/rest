@@ -6,7 +6,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.*;
 
-
+/**
+ * The BankService class with which the client can interact using REST.
+ * It uses a concurrentHashMap to store key value pairs where the key is the hashnumber of the account
+ * and the value is the account object.
+ * it has GET methods to het the object properties, PUT methods to deposit and withdraw money
+ * and a POST method to create an account.
+ * The creation of the account return a unique hashcode associated with the account.
+ * With this hashcode, the client can take actions on the associated account.
+ */
 @RestController
 @RequestMapping("/api/bank")
 public class BankService {
