@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * it has GET methods to het the object properties, PUT methods to deposit and withdraw money
  * and a POST method to create an account.
  * The creation of the account return a unique hashcode associated with the account.
- * With this hashcode, the client can take actions on the associated account.
+ * With this hashcode, the client can take actions on the associated account
  */
 @RestController
 @RequestMapping("/api/bank")
