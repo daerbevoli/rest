@@ -34,18 +34,18 @@ public class BankService {
     }
 
 
-    @GetMapping("/balance")
+    @GetMapping("/balance/{hash}")
     public double getBalance(@PathVariable int hash){
         return map.get(hash).getBalance();
     }
 
 
-    @GetMapping("/name")
+    @GetMapping("/name/{hash}")
     public String getName(@PathVariable int hash){
         return map.get(hash).getName();
     }
 
-    @GetMapping("/accountNumber")
+    @GetMapping("/accountNumber/{hash}")
     public String getAccountNumber(@PathVariable int hash){
         return map.get(hash).getAccountNumber();
     }
