@@ -28,6 +28,11 @@ public class BankService {
         return ResponseEntity.ok("Account created \nThis is your hashcode: " + account.getHash());
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<String> get(){
+        return ResponseEntity.ok("It works");
+    }
+
 
     @GetMapping("/balance")
     public double getBalance(@RequestBody int hash){
