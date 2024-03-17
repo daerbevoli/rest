@@ -89,7 +89,7 @@ public class BankService {
         } else {
             map.get(data.getHash()).withdraw(data.getAmount());
             return ResponseEntity.ok(data.getAmount() + " succesfully withdrawn\n" +
-                    "remaining balance: " + map.get(1).getBalance() + "\n" + HttpStatus.OK);
+                    "remaining balance: " + map.get(data.getHash()).getBalance() + "\n" + HttpStatus.OK);
         }
     }
 
