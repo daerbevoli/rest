@@ -12,28 +12,45 @@ import java.util.concurrent.*;
  * and the value is the account object.
  * it has GET methods to het the object properties, PUT methods to deposit and withdraw money
  * and a POST method to create an account.
- * The creation of the account return a unique hashcode associated with the account.
- * With this hashcode, the client can take actions on the associated account
- */
+ * The creation of the account takes as request body as JSON file with key value pairs and
+ * returns a unique hashcode associated with the account.
+ * With this hashcode, the client can take actions on the associated account.
+
+* Below I will explain all the annotations.
+* @RestController indicates the controller in the application. It is reponsible for handling HTTP resquests. 
+* @RequestMapping is used to map incoming requests to specifc handlers. This applicationn can be reached at the handle '/bank'
+* @PostMapping, @GetMapping etc. are specific handles methods corresponding to CRUD operations.
+* @PathVariable is a handle method to bind a parameter to a URI template variable. 
+* 
+*/
+
+
 @RestController
-@RequestMapping("/api/bank")
+@RequestMapping("/bank")
 public class BankService {
 
-
+    // This map is used to save bankaccount objects with the key, the hashcode of the account object and the value the object itself.
+    // ConcurrentHashMap is a thread safe inmplementation of the Map interface. 
+    // It allows multiple threads to read and modify the map concurrently without causing data corruption or inconsistency. 
+    // The use here is justified because the assigment demanded that two clients could use a joint account concurrently.
     private final ConcurrentHashMap<Integer, BankAccount> map = new ConcurrentHashMap<>(1);
 
+    // The putIfAbsent() method is used to prevent account creation with the same account number.
     @PostMapping("/create")
     public ResponseEntity<String> createAccount(@RequestBody BankAccount account){
         map.putIfAbsent(account.getHash(), new BankAccount(account.getName(), account.getBalance(), account.getAccountNumber()));
         return ResponseEntity.ok("Account created \nThis is your hashcode: " + account.getHash());
     }
 
+    // Get method to test remote nodes.
     @GetMapping("/get")
     public ResponseEntity<String> get(){
         return ResponseEntity.ok("It works");
     }
 
 
+    // The hash code has to be provided in the request URI 
+    
     @GetMapping("/balance/{hash}")
     public double getBalance(@PathVariable int hash){
         return map.get(hash).getBalance();
@@ -50,13 +67,20 @@ public class BankService {
         return map.get(hash).getAccountNumber();
     }
 
+    // ResponseEntity is used to send a reponse.
+
+    // Deposit of negative amount is not possible.
     @PostMapping("/deposit")
     public ResponseEntity<String> deposit(@RequestBody DWdata data){
-        map.get(data.getHash()).deposit(data.getAmount());
-        return ResponseEntity.ok(data.getAmount() + " succesfully deposited\n" +
+        if (data.getAmount() < 0){
+            return ResponseEntity.ok("Amount to deposit cannot be negative\n" + HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            map.get(data.getHash()).deposit(data.getAmount());
+            return ResponseEntity.ok(data.getAmount() + " succesfully deposited\n" +
                 "new balance: " + map.get(data.getHash()).getBalance() + "\n" + HttpStatus.OK);
     }
 
+    // Withdraw of money is not possible if withdraw amount is greater than balance.
     @PostMapping("/withdraw")
     public ResponseEntity<String> withdraw(@RequestBody DWdata data){
         if (map.get(data.getHash()).getBalance() < data.getAmount()){
@@ -73,7 +97,5 @@ public class BankService {
         map.get(hash).setBalance(0);
         return ResponseEntity.ok("Balance deleted\n" + HttpStatus.OK);
     }
-
-
-
+        
 }
