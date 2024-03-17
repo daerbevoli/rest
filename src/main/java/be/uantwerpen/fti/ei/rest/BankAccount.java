@@ -4,7 +4,7 @@ package be.uantwerpen.fti.ei.rest;
  * The BankAccount class has properties name, balance and accountnumber.
  * There are getter and setter for each property.
  * The object had a deposit and withdraw method.
- * It also had a getHash method for the accountnumber that return a unique hashnumber associated with the account
+ * It also had a getHash method for the accountnumber that return a unique hashnumber associated with the account.
  */
 public class BankAccount {
     private String name;
