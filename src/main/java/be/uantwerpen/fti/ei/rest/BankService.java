@@ -71,13 +71,14 @@ public class BankService {
 
     // Deposit of negative amount is not possible.
     @PostMapping("/deposit")
-    public ResponseEntity<String> deposit(@RequestBody DWdata data){
-        if (data.getAmount() < 0){
+    public ResponseEntity<String> deposit(@RequestBody DWdata data) {
+        if (data.getAmount() < 0) {
             return ResponseEntity.ok("Amount to deposit cannot be negative\n" + HttpStatus.NOT_ACCEPTABLE);
         } else {
             map.get(data.getHash()).deposit(data.getAmount());
             return ResponseEntity.ok(data.getAmount() + " succesfully deposited\n" +
-                "new balance: " + map.get(data.getHash()).getBalance() + "\n" + HttpStatus.OK);
+                    "new balance: " + map.get(data.getHash()).getBalance() + "\n" + HttpStatus.OK);
+        }
     }
 
     // Withdraw of money is not possible if withdraw amount is greater than balance.
